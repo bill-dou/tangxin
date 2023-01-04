@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>详情</title>
+    <link href="build.css" rel="stylesheet">
+    <script src="dayjs.min.js"></script>
+    <script src="dayjs-plugin-utc.min.js"></script>
+    <script src="dayjs-plugin-timezone.min.js"></script>
+    <style>
+        .passport {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .passport:before,
+        .passport:after {
+            content: "";
+            flex: 1 1;
+            border-bottom: 1px solid;
+            margin: auto;
+        }
+
+        .passport-dashed:before,
+        .passport-dashed:after {
+            border-bottom: 1px dashed;
+        }
+
+        .passport:before {
+            margin-right: 10px;
+        }
+
+        .passport:after {
+            margin-left: 10px;
+        }
+
+        .clock span {
+            background-color: #d5584a;
+            display: inline-block;
+            border-radius: 5px;
+            color: white;
+        }
+
+        .clock span:not(.milsec) {
+            width: 40px;
+        }
+
+        .clock .milsec {
+            width: 60px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="h-screen">
+        <header class="bg-pass-green text-white text-center py-5">
+            <div class="bg-pass-green text-white relative">
+                <a href="./index.html" class="flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                    </svg>
+                    通行证
+                </a>
+                <img src="img/close.png" alt="top" class="h-8 absolute right-0 top-1/2 -translate-y-1/2">
+            </div>
+            <div class="text-7xl font-semibold tracking-widest pt-6">通行证</div>
+            <div class="py-4 px-24 text-lg font-extralight tracking-widest passport passport-dashed">
+                PASSPORT
+            </div>
+        </header>
+        <main class="tracking-widest">
+            <div class="flex py-2">
+                <img src="img/photo.png" alt="" class="w-1/2">
+                <div class="p-3 pr-0 w-1/2 flex flex-col space-y-3 font-bold">
+                    <div>
+                        <div>来访人员/Name:</div>
+                        <div class="text-pass-green font-bold">唐歆</div>
+                    </div>
+
+                    <div>
+                        <div>随行人员/<br>Entourage:</div>
+                        <div class="text-pass-green font-bold">
+                            <span>1人</span>
+                            <span class="text-text-gray float-right text-base">查看 ></span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div>交通工具/Vehicle:</div>
+                        <div class="text-pass-green font-bold">
+                            <span>驾车</span>
+                            <span class="text-text-gray float-right text-base">查看 ></span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div>来访时间/Time:</div>
+                        <div class="text-pass-green font-bold" id="start"></div>
+                        <div class="text-pass-green font-bold" id="end"></div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="py-8 flex flex-col items-center gap-y-2">
+                <div class="inline-block bg-pass-red text-white text-2xl rounded" id="today">
+
+                </div>
+                <div class="text-3xl w-64 px-4 clock">
+
+                </div>
+                <div class="text-pass-green text-3xl">欢迎来访，允许通行！</div>
+                <div class="text-text-gray text-base">
+                    WELCOME TO VISIT
+                </div>
+            </div>
+            <div class="text-center bg-pass-green text-white text-base">
+                福建农林大学
+            </div>
+        </main>
+    </div>
+    <script>
+        function clock() {
+            // We create a new Date object and assign it to a variable called "time".
+            var time = new Date(),
+                // Access the "getHours" method on the Date object with the dot accessor.
+                hours = time.getHours(),
+                // Access the "getMinutes" method with the dot accessor.
+                minutes = time.getMinutes(),
+                seconds = time.getSeconds(),
+                milseconds = time.getMilliseconds(),
+                offset = time.getTimezoneOffset() / 60;
+
+            hours = (hours + offset + 8) % 24;
+
+            document.querySelectorAll(".clock")[0].innerHTML =
+                "<span>" + harold(hours) + "</span>:<span>" + harold(minutes) + "</span>:<span>" + harold(seconds) + "</span>:<span class='milsec'>" + milseconds + "</span>";
+
+            function harold(standIn) {
+                if (standIn < 10) {
+                    standIn = "0" + standIn;
+                }
+                return standIn;
+            }
+        }
+        setInterval(clock, 1);
+
+        dayjs.extend(window.dayjs_plugin_utc);
+        dayjs.extend(window.dayjs_plugin_timezone);
+
+        document.getElementById("today").innerHTML = dayjs()
+            .tz("Asia/Shanghai")
+            .format("YYYY-MM-DD");
+
+        let start = dayjs().tz("Asia/Shanghai").format("YYYY-MM-DD HH:00");
+
+        let end = dayjs()
+            .tz("Asia/Shanghai")
+            .add(6, "hour")
+            .format("YYYY-MM-DD HH:00");
+
+        document.getElementById("start").innerText = start;
+
+        document.getElementById("end").innerText = end;
+    </script>
+</body>
+
+</html>

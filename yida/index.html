@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>访问通行证</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@100;300;400;500;700;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="yida.css">
+    <script src="dayjs.min.js"></script>
+    <script src="dayjs-plugin-utc.min.js"></script>
+    <script src="dayjs-plugin-timezone.min.js"></script>
+</head>
+
+<body class="font-sans">
+    <div>
+        <img src="img/txz-2.png" alt="" class="w-full">
+        <main class="flex py-4 px-2">
+            <div class="pl-2 pr-0 w-7/12 flex flex-col text-gray-500">
+                <div class="space-y-3">
+                    <div>
+                        <div>来访人员 / Name:</div>
+                        <div class="text-yida font-bold leading-none text-field">唐歆</div>
+                    </div>
+
+                    <div>
+                        <div>随行人员 / Entourage:</div>
+                        <div class="text-yida font-bold leading-none text-field">
+                            0人
+                        </div>
+                    </div>
+
+                    <div>
+                        <div>交通工具 / Vehicle:</div>
+                        <div class="text-red-600 font-bold leading-none text-field">
+                            机动车（闽A078YA）
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="mt-8">
+                    <div>拜访时间 / Time:</div>
+                    <div class="leading-none text-field">
+                        <span class="text-yida font-bold" id="date"></span>
+                        <span class="text-yida font-bold" id="weekday"></span>
+                    </div>
+                </div>
+
+            </div>
+            <div class="w-5/12">
+                <img src="img/touxiang.png" alt="touxiang">
+            </div>
+        </main>
+        <footer>
+            <div class="py-4 flex flex-col items-center gap-y-1">
+                <div
+                    class="animate-scale-slow bg-yida-orange text-white font-bold text-xl px-2 py-1 shadow-fangxiang rounded-sm">
+                    上街校区 - 学府路1号 - 入方向
+                </div>
+                <div
+                    class="text-[32px] pt-2 flex clock text-yida-orange font-medium justify-center items-center leading-snug">
+
+                    <span class="w-10 text-center bg-[#f4e5da] rounded border border-yida-orange">
+                        <span id="hour" class="inline-block w-full"></span>
+                    </span>
+                    <span class="text-black colin text-2xl inline-block w-4 text-center">:</span>
+                    <span class="w-10 text-center bg-[#f4e5da] rounded border border-yida-orange">
+                        <span id="min" class="inline-block w-full"></span>
+                    </span>
+                    <span class="text-black colin text-2xl inline-block w-4 text-center">:</span>
+                    <span class="w-10 text-center bg-[#f4e5da] rounded border border-yida-orange">
+                        <span id="sec" class="inline-block"></span>
+                    </span>
+                    <span class="text-black colin text-2xl inline-block w-4 text-center">:</span>
+                    <span class="text-center bg-[#f4e5da] rounded border border-yida-orange">
+                        <span id="milsec" class="inline-block w-16"></span>
+                    </span>
+
+
+                    <!-- <span class="relative w-12 text-center">
+                        <span id="hour" class="inline-block w-full"></span>
+                        <img src="img/clock_frame_2.png" alt="" class="absolute top-1 w-full">
+                    </span>
+                    <span class="text-black colin">:</span>
+                    <span class="relative w-12 text-center">
+                        <span id="min" class="inline-block w-full"></span>
+                        <img src="img/clock_frame_2.png" alt="" class="absolute top-1 w-full">
+                    </span>
+                    <span class="text-black colin">:</span>
+                    <span class="relative w-12 text-center">
+                        <span id="sec" class="inline-block w-full"></span>
+                        <img src="img/clock_frame_2.png" alt="" class="absolute top-1 w-full">
+                    </span>
+                    <span class="text-black colin self-center">:</span>
+                    <span class="relative w-16">
+                        <span id="milsec" class="inline-block w-16"></span>
+                        <img src="img/clock_frame_3.png" alt="" class="absolute top-1 h-[47px] w-full">
+                    </span> -->
+                </div>
+                <div class="text-center text-xs tracking-[3px] text-yida-orange datetime w-2/3 rounded font-black mt-2"
+                    id="today">
+                </div>
+                <div class="text-yida text-xl font-black tracking-[3px]">欢迎来访，允许通行！</div>
+                <div class="text-yida text-xs">
+                    WELCOME TO VISIT
+                </div>
+                <div class="text-center bg-yida text-white mb-8 py-1 text-xs w-full">
+                    @2016 - 2020 by www.cezone.cn All rights reserved
+                </div>
+            </div>
+
+        </footer>
+    </div>
+    <script>
+        function harold(standIn) {
+            if (standIn < 10) {
+                standIn = "0" + standIn;
+            }
+            if (standIn >= 10 && standIn < 20) {
+                standIn = '<span class="ml-1.5">' + standIn + '</span>';
+            }
+            return standIn;
+        }
+
+        function clock() {
+            // We create a new Date object and assign it to a variable called "time".
+            var time = new Date(),
+                // Access the "getHours" method on the Date object with the dot accessor.
+                hours = time.getHours(),
+                // Access the "getMinutes" method with the dot accessor.
+                minutes = time.getMinutes(),
+                seconds = time.getSeconds(),
+                milseconds = time.getMilliseconds(),
+                offset = time.getTimezoneOffset() / 60;
+
+            hours = (hours + offset + 8) % 24;
+
+            document.getElementById('hour').innerHTML = harold(hours);
+            document.getElementById('min').innerHTML = harold(minutes);
+            document.getElementById('sec').innerHTML = harold(seconds);
+            document.getElementById('milsec').innerHTML = milseconds;
+        }
+
+        function getChinese(index) {
+            const weekdays = [
+                '星期日',
+                '星期一',
+                '星期二',
+                '星期三',
+                '星期四',
+                '星期五',
+                '星期六',
+            ]
+            return weekdays[index]
+        }
+        setInterval(clock, 1);
+
+        setInterval(function () {
+            document.querySelectorAll('.colin').forEach(element => {
+                element.style.opacity = (element.style.opacity == '1' ? '0' : '1');
+            });
+        }, 600);
+
+        dayjs.extend(window.dayjs_plugin_utc);
+        dayjs.extend(window.dayjs_plugin_timezone);
+
+        document.getElementById("today").innerHTML = dayjs()
+            .tz("Asia/Shanghai")
+            .format("YYYY年MM月DD日");
+
+        let date = dayjs().tz("Asia/Shanghai").format("YYYY.MM.DD");
+
+        let weekday = dayjs()
+            .tz("Asia/Shanghai")
+            .format("d");
+
+        document.getElementById("date").innerText = date;
+
+        document.getElementById("weekday").innerText = getChinese(weekday);
+    </script>
+</body>
+
+</html>
